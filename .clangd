@@ -1,0 +1,15 @@
+CompileFlags:
+  Remove:
+    - --use_fast_math
+  Add:
+    - -I.
+    - -I/usr/local/cuda/include
+    - --cuda-path=/usr/local/cuda
+    - --cuda-gpu-arch=sm_75
+    - -xcuda
+
+Diagnostics:
+  UnusedIncludes: None
+
+Index:
+  Background: Build

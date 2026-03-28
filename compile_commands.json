@@ -1,0 +1,58 @@
+[
+  {
+    "arguments": [
+      "/usr/local/cuda/bin/nvcc",
+      "-c",
+      "-g",
+      "--use_fast_math",
+      "-o",
+      "bin/chapter03/add",
+      "chapter03/add.cu"
+    ],
+    "directory": "/home/cdf/cuda",
+    "file": "/home/cdf/cuda/chapter03/add.cu",
+    "output": "/home/cdf/cuda/bin/chapter03/add"
+  },
+  {
+    "arguments": [
+      "/usr/local/cuda/bin/nvcc",
+      "-c",
+      "-g",
+      "--use_fast_math",
+      "-o",
+      "bin/chapter03/hello",
+      "chapter03/hello.cu"
+    ],
+    "directory": "/home/cdf/cuda",
+    "file": "/home/cdf/cuda/chapter03/hello.cu",
+    "output": "/home/cdf/cuda/bin/chapter03/hello"
+  },
+  {
+    "arguments": [
+      "/usr/local/cuda/bin/nvcc",
+      "-c",
+      "-g",
+      "--use_fast_math",
+      "-o",
+      "bin/chapter03/query_device",
+      "chapter03/query_device.cu"
+    ],
+    "directory": "/home/cdf/cuda",
+    "file": "/home/cdf/cuda/chapter03/query_device.cu",
+    "output": "/home/cdf/cuda/bin/chapter03/query_device"
+  },
+  {
+    "arguments": [
+      "/usr/local/cuda/bin/nvcc",
+      "-c",
+      "-g",
+      "--use_fast_math",
+      "-o",
+      "bin/chapter04/vector_add",
+      "chapter04/vector_add.cu"
+    ],
+    "directory": "/home/cdf/cuda",
+    "file": "/home/cdf/cuda/chapter04/vector_add.cu",
+    "output": "/home/cdf/cuda/bin/chapter04/vector_add"
+  }
+]
