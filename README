@@ -6,6 +6,12 @@ This repository contains the source code for the book "CUDA by Example: An Intro
 Dependencies
 ------------
 
-* 
+* CUDA toolkit
+* OpenGL
 
+Quick Start
+-----------
 
+```shell
+make all
+```
