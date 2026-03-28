@@ -12,6 +12,4 @@ Dependencies
 Quick Start
 -----------
 
-```shell
-make all
-```
+* Run command: make all
