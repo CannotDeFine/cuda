@@ -37,8 +37,9 @@ __global__ void kernel(unsigned char *ptr, const Sphere *s) {
     int offset = x + y * gridDim.x * blockDim.x;
 
     // Center the image plane so the scene is rendered around the origin.
-    float ox = (x - DIM / 2);
-    float oy = (y - DIM / 2);
+    float half = DIM / 2.0f;
+    float ox = (x - half);
+    float oy = (y - half);
 
     float r = 0, g = 0, b = 0;
     float minz = INF;
