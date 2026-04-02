@@ -1,6 +1,10 @@
 .cache/
 .vscode/
-bin/
+
 .clang-format
 .clangd
+.codex
+
+bin/
+
 compile_commands.json

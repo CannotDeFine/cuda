@@ -30,12 +30,6 @@ __global__ void dot(float *a, float *b, float *c) {
         i /= 2;
     }
 
-    // 如果将__syncthreads()移动到如下位置：
-    while (i != 0) {
-        if (cacheIdx < i) {
-            
-        }
-    }
 
     if (cacheIdx == 0) c[blockIdx.x] = cache[0];
 }

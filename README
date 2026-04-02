@@ -6,10 +6,12 @@ This repository contains the source code for the book "CUDA by Example: An Intro
 Dependencies
 ------------
 
-* CUDA toolkit
-* OpenGL
+* CUDA Version 13.2
+* Driver Version 595.79
+* OpenGL Version 4.5
 
 Quick Start
 -----------
 
-* Run command: make all
+* Run "make all" to build all the examples.
+* Run "make clean" to remove all the built files.
