@@ -93,11 +93,13 @@ int main(void) {
     float times;
     HANDLE_ERROR(cudaEventElapsedTime(&times, start, stop));
     printf("Time to generate: %.3f\n", times);
-    
+
     HANDLE_ERROR(cudaMemcpy(bitmap.get_ptr(), dev_bitmap, bitmap.image_size(), cudaMemcpyDeviceToHost));
 
     bitmap.display_and_exit();
 
+    HANDLE_ERROR(cudaEventDestroy(start));
+    HANDLE_ERROR(cudaEventDestroy(stop));
     cudaFree(dev_bitmap);
 
     return 0;
