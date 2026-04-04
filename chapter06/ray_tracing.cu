@@ -65,11 +65,7 @@ __global__ void kernel(unsigned char *ptr, const Sphere *s) {
 int main() {
     srand((unsigned)time(nullptr));
 
-    cudaEvent_t start, stop;
-
-    HANDLE_ERROR(cudaEventCreate(&start));
-    HANDLE_ERROR(cudaEventCreate(&stop));
-    HANDLE_ERROR(cudaEventRecord(start, 0));
+    
 
     CPUBitmap bitmap(DIM, DIM);
     unsigned char *dev_bitmap;
@@ -92,6 +88,12 @@ int main() {
     HANDLE_ERROR(cudaMemcpy(dev_spheres, temp_s, sizeof(Sphere) * SPHERES, cudaMemcpyHostToDevice));
     free(temp_s);
 
+    cudaEvent_t start, stop;
+
+    HANDLE_ERROR(cudaEventCreate(&start));
+    HANDLE_ERROR(cudaEventCreate(&stop));
+    HANDLE_ERROR(cudaEventRecord(start, 0));
+
     // Launch a 2D grid so each thread computes one pixel of the final image.
     dim3 grids(DIM / 16, DIM / 16);
     dim3 threads(16, 16);
@@ -100,8 +102,15 @@ int main() {
     // Wait for rendering to finish before copying the image back for display.
     HANDLE_ERROR(cudaGetLastError());
     HANDLE_ERROR(cudaDeviceSynchronize());
+    HANDLE_ERROR(cudaEventRecord(stop, 0));
+    HANDLE_ERROR(cudaEventSynchronize(stop));
+    float times;
+    HANDLE_ERROR(cudaEventElapsedTime(&times, start, stop));
+    printf("Time to generate: %.3f\n", times);
+    
     HANDLE_ERROR(
         cudaMemcpy(bitmap.get_ptr(), dev_bitmap, bitmap.image_size(), cudaMemcpyDeviceToHost));
+    
 
     bitmap.display_and_exit();
 
