@@ -20,6 +20,8 @@ struct DataBlock {
     float frames;
 };
 
+// 将固定热源从cptr重新写回iptr
+// 维持固定温度边界条件
 __global__ void copy_const_kernel(float *iptr, const float *cptr) {
     int x = threadIdx.x + blockDim.x * blockIdx.x;
     int y = threadIdx.y + blockDim.y * blockIdx.y;
@@ -28,6 +30,7 @@ __global__ void copy_const_kernel(float *iptr, const float *cptr) {
     if (cptr[idx] != 0) iptr[idx] = cptr[idx];
 }
 
+// 计算当前点下一个时刻的温度
 __global__ void blend_kernel(float *out_src, const float *in_src) {
     int x = threadIdx.x + blockDim.x * blockIdx.x;
     int y = threadIdx.y + blockDim.y * blockIdx.y;
@@ -49,14 +52,17 @@ void anim_gpu(DataBlock *d, int ticks) {
     HANDLE_ERROR(cudaEventRecord(d->start, 0));
     dim3 blocks(DIM / 16, DIM / 16);
     dim3 threads(16, 16);
-    
+
     CPUAnimBitmap *bitmap = d->bitmap;
     for (int i = 0; i < 90; i++) {
         copy_const_kernel<<<blocks, threads>>>(d->dev_in_src, d->dev_const_src);
         blend_kernel<<<blocks, threads>>>(d->dev_out_src, d->dev_in_src);
+        // 上一轮的输出作为这一轮的输入
         swap(d->dev_in_src, d->dev_out_src);
     }
     float_to_color<<<blocks, threads>>>(d->output_bitmap, d->dev_in_src);
+
+    HANDLE_ERROR(cudaMemcpy(bitmap->get_ptr(), d->output_bitmap, bitmap->image_size(), cudaMemcpyDeviceToHost));
 
     HANDLE_ERROR(cudaEventRecord(d->stop, 0));
     HANDLE_ERROR(cudaEventSynchronize(d->stop));
@@ -97,7 +103,7 @@ int main(void) {
         temp[i] = 0;
         int x = i % DIM;
         int y = i / DIM;
-        if ((x > 3000) && (x < 600) && (y > 310) && (y < 601)) temp[i] = MAX_TEMP;
+        if ((x > 300) && (x < 600) && (y > 310) && (y < 601)) temp[i] = MAX_TEMP;
     }
     
     temp[DIM * 100 + 100] = (MAX_TEMP + MIN_TEMP) / 2;
@@ -110,7 +116,13 @@ int main(void) {
             temp[x + y * DIM] = MIN_TEMP;
         }
     }
+    HANDLE_ERROR(cudaMemcpy(data.dev_const_src, temp, bitmap.image_size(), cudaMemcpyHostToDevice));
 
+    for (int y = 800; y < DIM; y++) {
+        for (int x = 0; x < 200; x++) {
+            temp[x + y * DIM] = MAX_TEMP;
+        }
+    }
     HANDLE_ERROR(cudaMemcpy(data.dev_in_src, temp, bitmap.image_size(), cudaMemcpyHostToDevice));
     free(temp);
 
