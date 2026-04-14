@@ -15,6 +15,7 @@ bin/chapter05/bitmap: EXTRA_LIBS := $(OPENGL_LIBS)
 bin/chapter06/ray_tracing: EXTRA_LIBS := $(OPENGL_LIBS)
 bin/chapter06/ray_tracing_with_const: EXTRA_LIBS := $(OPENGL_LIBS)
 bin/chapter07/heat: EXTRA_LIBS := $(OPENGL_LIBS)
+bin/chapter07/heat_with_texture: EXTRA_LIBS := $(OPENGL_LIBS)
 
 bin/%: %.cu
 	@mkdir -p $(dir $@)
